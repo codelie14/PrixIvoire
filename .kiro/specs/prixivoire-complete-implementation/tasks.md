@@ -223,15 +223,15 @@ Ce plan d'implémentation décompose les améliorations de PrixIvoire en tâches
 
 ### Phase 4 : Fonctionnalités Avancées
 
-- [ ] 11. Implémenter le système d'autocomplétion
-  - [ ] 11.1 Créer AutocompleteService
+- [x] 11. Implémenter le système d'autocomplétion
+  - [x] 11.1 Créer AutocompleteService
     - Implémenter getSuggestions() avec filtrage par requête
     - Implémenter recordUsage() pour enregistrer la fréquence
     - Implémenter getFrequencyMap() pour le tri
     - Limiter à 10 suggestions maximum
     - _Exigences: 3.1, 3.3, 3.5_
   
-  - [ ] 11.2 Créer les widgets d'autocomplétion
+  - [x] 11.2 Créer les widgets d'autocomplétion
     - Créer AutocompleteTextField pour produits
     - Créer AutocompleteTextField pour magasins
     - Gérer la sélection et le remplissage automatique

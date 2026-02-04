@@ -128,101 +128,102 @@ class PriceComparisonVisualScreen extends StatelessWidget {
                       child: SizedBox(
                         height: 300,
                         child: BarChart(
-                        BarChartData(
-                          alignment: BarChartAlignment.spaceAround,
-                          maxY: _maxPrice != null ? _maxPrice! * 1.2 : 100000,
-                          barTouchData: BarTouchData(
-                            enabled: true,
-                            touchTooltipData: BarTouchTooltipData(
-                              getTooltipColor: (group) => Colors.grey.shade800,
-                              tooltipRoundedRadius: 8,
+                          BarChartData(
+                            alignment: BarChartAlignment.spaceAround,
+                            maxY: _maxPrice != null ? _maxPrice! * 1.2 : 100000,
+                            barTouchData: BarTouchData(
+                              enabled: true,
+                              touchTooltipData: BarTouchTooltipData(
+                                getTooltipColor: (group) => Colors.grey.shade800,
+                                tooltipRoundedRadius: 8,
+                              ),
                             ),
-                          ),
-                          titlesData: FlTitlesData(
-                            show: true,
-                            rightTitles: const AxisTitles(
-                              sideTitles: SideTitles(showTitles: false),
-                            ),
-                            topTitles: const AxisTitles(
-                              sideTitles: SideTitles(showTitles: false),
-                            ),
-                            bottomTitles: AxisTitles(
-                              sideTitles: SideTitles(
-                                showTitles: true,
-                                getTitlesWidget: (value, meta) {
-                                  if (value.toInt() >= 0 &&
-                                      value.toInt() < productsWithPrice.length) {
-                                    final product = productsWithPrice[value.toInt()];
-                                    return Padding(
-                                      padding: const EdgeInsets.only(top: 8.0),
-                                      child: Text(
-                                        product.shop.length > 10
-                                            ? '${product.shop.substring(0, 10)}...'
-                                            : product.shop,
-                                        style: const TextStyle(
-                                          fontSize: 10,
-                                          color: Colors.grey,
+                            titlesData: FlTitlesData(
+                              show: true,
+                              rightTitles: const AxisTitles(
+                                sideTitles: SideTitles(showTitles: false),
+                              ),
+                              topTitles: const AxisTitles(
+                                sideTitles: SideTitles(showTitles: false),
+                              ),
+                              bottomTitles: AxisTitles(
+                                sideTitles: SideTitles(
+                                  showTitles: true,
+                                  getTitlesWidget: (value, meta) {
+                                    if (value.toInt() >= 0 &&
+                                        value.toInt() < productsWithPrice.length) {
+                                      final product = productsWithPrice[value.toInt()];
+                                      return Padding(
+                                        padding: const EdgeInsets.only(top: 8.0),
+                                        child: Text(
+                                          product.shop.length > 10
+                                              ? '${product.shop.substring(0, 10)}...'
+                                              : product.shop,
+                                          style: const TextStyle(
+                                            fontSize: 10,
+                                            color: Colors.grey,
+                                          ),
+                                          textAlign: TextAlign.center,
                                         ),
-                                        textAlign: TextAlign.center,
+                                      );
+                                    }
+                                    return const Text('');
+                                  },
+                                  reservedSize: 40,
+                                ),
+                              ),
+                              leftTitles: AxisTitles(
+                                sideTitles: SideTitles(
+                                  showTitles: true,
+                                  reservedSize: 60,
+                                  getTitlesWidget: (value, meta) {
+                                    return Text(
+                                      NumberFormat('#,##0').format(value.toInt()),
+                                      style: const TextStyle(
+                                        fontSize: 10,
+                                        color: Colors.grey,
                                       ),
                                     );
-                                  }
-                                  return const Text('');
-                                },
-                                reservedSize: 40,
-                              ),
-                            ),
-                            leftTitles: AxisTitles(
-                              sideTitles: SideTitles(
-                                showTitles: true,
-                                reservedSize: 60,
-                                getTitlesWidget: (value, meta) {
-                                  return Text(
-                                    NumberFormat('#,##0').format(value.toInt()),
-                                    style: const TextStyle(
-                                      fontSize: 10,
-                                      color: Colors.grey,
-                                    ),
-                                  );
-                                },
-                              ),
-                            ),
-                          ),
-                          gridData: FlGridData(
-                            show: true,
-                            drawVerticalLine: false,
-                            getDrawingHorizontalLine: (value) {
-                              return FlLine(
-                                color: Colors.grey.shade300,
-                                strokeWidth: 1,
-                              );
-                            },
-                          ),
-                          borderData: FlBorderData(show: false),
-                          barGroups: productsWithPrice.asMap().entries.map((entry) {
-                            final index = entry.key;
-                            final product = entry.value;
-                            final isMin = product.price == _minPrice;
-                            final isMax = product.price == _maxPrice;
-
-                            return BarChartGroupData(
-                              x: index,
-                              barRods: [
-                                BarChartRodData(
-                                  toY: product.price ?? 0,
-                                  color: isMin
-                                      ? Colors.green
-                                      : isMax
-                                          ? Colors.red
-                                          : Theme.of(context).colorScheme.primary,
-                                  width: 20,
-                                  borderRadius: const BorderRadius.vertical(
-                                    top: Radius.circular(4),
-                                  ),
+                                  },
                                 ),
-                              ],
-                            );
-                          }).toList(),
+                              ),
+                            ),
+                            gridData: FlGridData(
+                              show: true,
+                              drawVerticalLine: false,
+                              getDrawingHorizontalLine: (value) {
+                                return FlLine(
+                                  color: Colors.grey.shade300,
+                                  strokeWidth: 1,
+                                );
+                              },
+                            ),
+                            borderData: FlBorderData(show: false),
+                            barGroups: productsWithPrice.asMap().entries.map((entry) {
+                              final index = entry.key;
+                              final product = entry.value;
+                              final isMin = product.price == _minPrice;
+                              final isMax = product.price == _maxPrice;
+
+                              return BarChartGroupData(
+                                x: index,
+                                barRods: [
+                                  BarChartRodData(
+                                    toY: product.price ?? 0,
+                                    color: isMin
+                                        ? Colors.green
+                                        : isMax
+                                            ? Colors.red
+                                            : Theme.of(context).colorScheme.primary,
+                                    width: 20,
+                                    borderRadius: const BorderRadius.vertical(
+                                      top: Radius.circular(4),
+                                    ),
+                                  ),
+                                ],
+                              );
+                            }).toList(),
+                          ),
                         ),
                       ),
                     ),
@@ -255,94 +256,95 @@ class PriceComparisonVisualScreen extends StatelessWidget {
                           ? Colors.red.shade50
                           : null,
                   child: ListTile(
-                  leading: Container(
-                    width: 50,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color: isMin
-                          ? Colors.green
-                          : isMax
-                              ? Colors.red
-                              : Theme.of(context).colorScheme.primary,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Center(
-                      child: Text(
-                        product.shop.substring(0, 1).toUpperCase(),
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
+                    leading: Container(
+                      width: 50,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: isMin
+                            ? Colors.green
+                            : isMax
+                                ? Colors.red
+                                : Theme.of(context).colorScheme.primary,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Center(
+                        child: Text(
+                          product.shop.substring(0, 1).toUpperCase(),
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  title: Text(
-                    product.shop,
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  subtitle: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(height: 4),
-                      Text(
-                        product.name,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.grey.shade600,
-                        ),
-                      ),
-                      if (isMin || isMax) ...[
-                        const SizedBox(height: 4),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 2,
-                          ),
-                          decoration: BoxDecoration(
-                            color: isMin ? Colors.green : Colors.red,
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Text(
-                            isMin ? 'MEILLEUR PRIX' : 'PRIX LE PLUS ÉLEVÉ',
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 10,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ],
-                  ),
-                  trailing: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Text(
-                        '${NumberFormat('#,##0').format(product.price)} FCFA',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: isMin
-                              ? Colors.green.shade700
-                              : isMax
-                                  ? Colors.red.shade700
-                                  : Theme.of(context).colorScheme.primary,
-                        ),
-                      ),
-                      if (_averagePrice != null) ...[
+                    title: Text(
+                      product.shop,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
                         const SizedBox(height: 4),
                         Text(
-                          _getPriceDifference(product.price!, _averagePrice!),
+                          product.name,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                            fontSize: 10,
+                            fontSize: 12,
                             color: Colors.grey.shade600,
                           ),
                         ),
+                        if (isMin || isMax) ...[
+                          const SizedBox(height: 4),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 2,
+                            ),
+                            decoration: BoxDecoration(
+                              color: isMin ? Colors.green : Colors.red,
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Text(
+                              isMin ? 'MEILLEUR PRIX' : 'PRIX LE PLUS ÉLEVÉ',
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ],
                       ],
-                    ],
+                    ),
+                    trailing: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text(
+                          '${NumberFormat('#,##0').format(product.price)} FCFA',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: isMin
+                                ? Colors.green.shade700
+                                : isMax
+                                    ? Colors.red.shade700
+                                    : Theme.of(context).colorScheme.primary,
+                          ),
+                        ),
+                        if (_averagePrice != null) ...[
+                          const SizedBox(height: 4),
+                          Text(
+                            _getPriceDifference(product.price!, _averagePrice!),
+                            style: TextStyle(
+                              fontSize: 10,
+                              color: Colors.grey.shade600,
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
                   ),
                 ),
               );
