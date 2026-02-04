@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../services/storage_service.dart';
+import '../services/optimized_storage_service.dart';
 import '../services/cache_service.dart';
 import '../models/product_price.dart';
 import '../core/utils/page_transitions.dart';
@@ -16,11 +17,13 @@ import 'settings_screen.dart';
 class HomeScreen extends StatefulWidget {
   final StorageService storageService;
   final CacheService cacheService;
+  final OptimizedStorageService? optimizedStorageService;
 
   const HomeScreen({
     super.key,
     required this.storageService,
     required this.cacheService,
+    this.optimizedStorageService,
   });
 
   @override
@@ -29,6 +32,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   List<ProductPrice> _recentPrices = [];
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -36,12 +40,45 @@ class _HomeScreenState extends State<HomeScreen> {
     _loadRecentPrices();
   }
 
-  void _loadRecentPrices() {
-    final allPrices = widget.storageService.getAllProductPrices();
-    allPrices.sort((a, b) => b.date.compareTo(a.date));
+  Future<void> _loadRecentPrices() async {
+    if (_isLoading) return;
+
     setState(() {
-      _recentPrices = allPrices.take(5).toList();
+      _isLoading = true;
     });
+
+    try {
+      // Utiliser le service optimisé si disponible, sinon le service standard
+      if (widget.optimizedStorageService != null) {
+        // Charger uniquement les 5 prix les plus récents avec pagination
+        final prices = await widget.optimizedStorageService!.getPricesPaginated(0, pageSize: 50);
+        prices.sort((a, b) => b.date.compareTo(a.date));
+        setState(() {
+          _recentPrices = prices.take(5).toList();
+          _isLoading = false;
+        });
+      } else {
+        // Fallback vers le service standard
+        final allPrices = widget.storageService.getAllProductPrices();
+        allPrices.sort((a, b) => b.date.compareTo(a.date));
+        setState(() {
+          _recentPrices = allPrices.take(5).toList();
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+      });
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Erreur lors du chargement: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
   }
 
   @override
@@ -81,14 +118,16 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: RefreshIndicator(
         onRefresh: () async {
-          _loadRecentPrices();
+          await _loadRecentPrices();
         },
-        child: SingleChildScrollView(
-          physics: const AlwaysScrollableScrollPhysics(),
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
+        child: _isLoading && _recentPrices.isEmpty
+            ? const Center(child: CircularProgressIndicator())
+            : SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
               // Boutons d'action principaux
               Row(
                 children: [

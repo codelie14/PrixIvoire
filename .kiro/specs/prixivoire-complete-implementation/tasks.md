@@ -152,21 +152,21 @@ Ce plan d'implémentation décompose les améliorations de PrixIvoire en tâches
 
 ### Phase 3 : Optimisation du Stockage et Performance
 
-- [ ] 8. Optimiser le service de stockage Hive
-  - [ ] 8.1 Créer OptimizedStorageService
+- [x] 8. Optimiser le service de stockage Hive
+  - [x] 8.1 Créer OptimizedStorageService
     - Implémenter initialize() avec ouverture des boxes
     - Créer des index sur productName, storeName, date
     - Implémenter getPricesPaginated() avec skip/take
     - Implémenter searchProducts() optimisé
     - _Exigences: 10.1, 10.2, 10.3_
   
-  - [ ] 8.2 Implémenter le lazy loading et la pagination
+  - [x] 8.2 Implémenter le lazy loading et la pagination
     - Créer une méthode pour charger par lots de 50 éléments
     - Implémenter le chargement à la demande dans les listes
     - Optimiser l'écran d'accueil pour charger uniquement les données nécessaires
     - _Exigences: 10.3, 10.4_
   
-  - [ ] 8.3 Implémenter la compaction et le nettoyage
+  - [x] 8.3 Implémenter la compaction et le nettoyage
     - Créer compactDatabase() pour compacter quand taille > 50MB
     - Implémenter cleanOldEntries() pour limiter à 1000 entrées par type
     - Exécuter en arrière-plan avec compute()
