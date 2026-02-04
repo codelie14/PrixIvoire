@@ -805,3 +805,496 @@ class SafeExecutor {
 }
 ```
 
+
+
+## Propriétés de Correction
+
+Une propriété est une caractéristique ou un comportement qui doit être vrai pour toutes les exécutions valides d'un système - essentiellement, une déclaration formelle sur ce que le système devrait faire. Les propriétés servent de pont entre les spécifications lisibles par l'homme et les garanties de correction vérifiables par machine.
+
+### Réflexion sur les Propriétés
+
+Après analyse des critères d'acceptation, plusieurs propriétés peuvent être combinées ou sont redondantes :
+
+- **2.2 et 2.3** : La persistance du thème et son chargement au démarrage peuvent être testés ensemble via un round-trip
+- **4.3 et 7.3** : Le filtrage par catégorie est mentionné deux fois, une seule propriété suffit
+- **9.5 et 11.5** : La gestion d'erreur OCR est mentionnée deux fois
+- **6.1, 6.2, 6.3, 6.4, 6.6** : Les calculs statistiques peuvent être regroupés en une propriété de correction des calculs
+
+### Propriétés Testables
+
+#### Propriété 1: Persistance du Thème (Round-Trip)
+*Pour tout* mode de thème sélectionné (clair, sombre, système), sauvegarder le thème puis redémarrer l'application devrait restaurer le même mode de thème.
+**Valide: Exigences 2.2, 2.3**
+
+#### Propriété 2: Performance des Transitions
+*Pour toute* navigation entre écrans, la durée de la transition d'animation ne devrait pas dépasser 300ms.
+**Valide: Exigences 1.2**
+
+#### Propriété 3: Application Complète du Thème
+*Pour tout* changement de thème, tous les widgets visibles devraient refléter le nouveau thème sans nécessiter de redémarrage de l'application.
+**Valide: Exigences 1.3**
+
+#### Propriété 4: Conformité WCAG pour les Contrastes
+*Pour toute* paire de couleurs (texte/fond) dans l'application, le ratio de contraste devrait respecter le niveau AA de WCAG 2.1 (minimum 4.5:1 pour le texte normal, 3:1 pour le texte large).
+**Valide: Exigences 1.5**
+
+#### Propriété 5: Labels Sémantiques pour l'Accessibilité
+*Pour tout* widget interactif (boutons, champs de saisie, liens), un label sémantique devrait être défini pour les lecteurs d'écran.
+**Valide: Exigences 1.6**
+
+#### Propriété 6: Performance du Changement de Thème
+*Pour tout* changement de thème, la mise à jour visuelle devrait être complétée en moins de 100ms.
+**Valide: Exigences 2.5**
+
+#### Propriété 7: Suggestions d'Autocomplétion
+*Pour toute* requête d'au moins 2 caractères dans un champ produit ou magasin, si des correspondances existent dans l'historique, une liste de suggestions devrait être retournée.
+**Valide: Exigences 3.1**
+
+#### Propriété 8: Remplissage Automatique par Suggestion
+*Pour toute* suggestion sélectionnée dans la liste d'autocomplétion, le champ devrait être automatiquement rempli avec la valeur exacte de la suggestion.
+**Valide: Exigences 3.2**
+
+#### Propriété 9: Tri des Suggestions par Fréquence
+*Pour toute* liste de suggestions d'autocomplétion, les suggestions devraient être triées par ordre décroissant de fréquence d'utilisation.
+**Valide: Exigences 3.3**
+
+#### Propriété 10: Limite des Suggestions
+*Pour toute* requête d'autocomplétion, le nombre de suggestions retournées ne devrait jamais dépasser 10.
+**Valide: Exigences 3.5**
+
+#### Propriété 11: Filtrage par Catégorie
+*Pour toute* catégorie sélectionnée, le filtrage devrait retourner uniquement les produits appartenant à cette catégorie.
+**Valide: Exigences 4.3**
+
+#### Propriété 12: Comptage par Catégorie
+*Pour toute* catégorie, le nombre affiché de produits devrait correspondre exactement au nombre de produits ayant cette catégorie dans la base de données.
+**Valide: Exigences 4.5**
+
+#### Propriété 13: Correction des Calculs Statistiques
+*Pour tout* ensemble de prix d'un produit :
+- La moyenne devrait être égale à la somme des prix divisée par le nombre de prix
+- La médiane devrait être la valeur centrale (ou moyenne des deux centrales) après tri
+- L'écart-type devrait être calculé selon la formule : sqrt(sum((x - mean)^2) / n)
+- Le minimum et maximum devraient correspondre aux valeurs extrêmes
+- L'économie potentielle devrait être égale à (max - min)
+**Valide: Exigences 6.1, 6.2, 6.3, 6.4, 6.6**
+
+#### Propriété 14: Filtrage par Période
+*Pour toute* plage de dates sélectionnée, le filtrage devrait retourner uniquement les prix dont la date est comprise entre la date de début et la date de fin (incluses).
+**Valide: Exigences 7.1**
+
+#### Propriété 15: Filtrage par Fourchette de Prix
+*Pour toute* fourchette de prix (min, max), le filtrage devrait retourner uniquement les prix compris entre min et max (inclus).
+**Valide: Exigences 7.2**
+
+#### Propriété 16: Filtrage par Magasin
+*Pour tout* nom de magasin sélectionné, le filtrage devrait retourner uniquement les prix provenant de ce magasin.
+**Valide: Exigences 7.4**
+
+#### Propriété 17: Combinaison de Filtres (ET Logique)
+*Pour tout* ensemble de filtres appliqués simultanément (date, prix, catégorie, magasin), un prix devrait être inclus dans les résultats si et seulement si il satisfait TOUS les filtres actifs.
+**Valide: Exigences 7.5**
+
+#### Propriété 18: Performance du Filtrage
+*Pour toute* application de filtres sur une base de données de moins de 10 000 entrées, les résultats devraient être retournés en moins de 500ms.
+**Valide: Exigences 7.6**
+
+#### Propriété 19: Comptage des Résultats Filtrés
+*Pour tout* ensemble de filtres appliqués, le nombre affiché de résultats devrait correspondre exactement au nombre d'entrées satisfaisant les filtres.
+**Valide: Exigences 7.7**
+
+#### Propriété 20: Persistance des Favoris (Round-Trip)
+*Pour tout* produit ajouté aux favoris, sauvegarder puis recharger l'application devrait conserver ce produit dans la liste des favoris.
+**Valide: Exigences 8.2**
+
+#### Propriété 21: Suppression des Favoris
+*Pour tout* produit retiré des favoris, ce produit ne devrait plus apparaître dans la liste des favoris immédiatement après la suppression.
+**Valide: Exigences 8.4**
+
+#### Propriété 22: Récupération du Dernier Prix pour les Favoris
+*Pour tout* produit dans la liste des favoris, le prix affiché devrait correspondre au prix le plus récent (date maximale) enregistré pour ce produit.
+**Valide: Exigences 8.5**
+
+#### Propriété 23: Prétraitement d'Image OCR
+*Pour toute* image soumise à l'OCR, l'image devrait subir un prétraitement (ajustement contraste, luminosité, rotation) avant l'extraction de texte.
+**Valide: Exigences 9.1**
+
+#### Propriété 24: Performance de l'OCR
+*Pour toute* image standard (< 5MB), le traitement OCR complet devrait être terminé en moins de 5 secondes.
+**Valide: Exigences 9.3**
+
+#### Propriété 25: Extraction de Paires Produit-Prix
+*Pour tout* texte détecté par l'OCR contenant des motifs produit-prix, l'application devrait extraire correctement les paires en utilisant une expression régulière appropriée.
+**Valide: Exigences 9.4**
+
+#### Propriété 26: Performance de Recherche
+*Pour toute* recherche dans une base de données de moins de 10 000 entrées, les résultats devraient être retournés en moins de 200ms.
+**Valide: Exigences 10.2**
+
+#### Propriété 27: Pagination des Listes
+*Pour toute* liste contenant plus de 50 éléments, la pagination devrait être activée et charger les éléments par lots de 50.
+**Valide: Exigences 10.3**
+
+#### Propriété 28: Lazy Loading au Démarrage
+*Pour tout* démarrage de l'application, seules les données nécessaires à l'affichage de l'écran d'accueil devraient être chargées initialement.
+**Valide: Exigences 10.4**
+
+#### Propriété 29: Limite de l'Historique
+*Pour tout* type de données (prix, alertes, historique), le nombre d'entrées stockées ne devrait jamais dépasser 1000, les plus anciennes étant supprimées en premier.
+**Valide: Exigences 10.6**
+
+#### Propriété 30: Messages d'Erreur en Français
+*Pour toute* erreur survenant dans l'application, le message d'erreur affiché à l'utilisateur devrait être en français.
+**Valide: Exigences 11.1**
+
+#### Propriété 31: Logging des Erreurs
+*Pour toute* opération qui échoue, une entrée de log devrait être créée contenant le message d'erreur, le stack trace, et le timestamp.
+**Valide: Exigences 11.2**
+
+#### Propriété 32: Cache des Produits Populaires
+*Pour tout* moment donné, les 50 produits les plus consultés devraient être disponibles dans le cache.
+**Valide: Exigences 12.1**
+
+#### Propriété 33: TTL du Cache de Recherche
+*Pour tout* résultat de recherche mis en cache, il devrait expirer et être invalidé après 5 minutes.
+**Valide: Exigences 12.2**
+
+#### Propriété 34: Performance du Cache
+*Pour toute* donnée disponible dans le cache, l'accès devrait prendre moins de 50ms.
+**Valide: Exigences 12.3**
+
+#### Propriété 35: Éviction LRU du Cache
+*Pour tout* cache atteignant 10MB, les entrées les moins récemment utilisées devraient être supprimées en premier jusqu'à ce que la taille soit réduite.
+**Valide: Exigences 12.4**
+
+#### Propriété 36: Invalidation du Cache lors de Modifications
+*Pour toute* modification de données (ajout, mise à jour, suppression), les entrées de cache correspondantes devraient être invalidées immédiatement.
+**Valide: Exigences 12.5**
+
+#### Propriété 37: Vidage Manuel du Cache
+*Pour toute* action de vidage manuel du cache par l'utilisateur, toutes les entrées du cache devraient être supprimées.
+**Valide: Exigences 12.6**
+
+#### Propriété 38: Export CSV Valide
+*Pour tout* ensemble de données exporté en CSV, le fichier généré devrait être un CSV valide avec encodage UTF-8 et séparateur virgule.
+**Valide: Exigences 13.1**
+
+#### Propriété 39: Export PDF Valide
+*Pour tout* ensemble de données exporté en PDF, le fichier généré devrait être un PDF valide et lisible.
+**Valide: Exigences 13.2**
+
+#### Propriété 40: Export Excel Valide
+*Pour tout* ensemble de données exporté en Excel sur une plateforme supportée, le fichier généré devrait être un fichier XLSX valide.
+**Valide: Exigences 13.3**
+
+#### Propriété 41: Métadonnées dans les Exports
+*Pour tout* fichier exporté (CSV, PDF, Excel), les métadonnées (date d'export, nombre d'entrées) devraient être incluses.
+**Valide: Exigences 13.6**
+
+#### Propriété 42: Génération de JSON pour Partage
+*Pour tout* ensemble de prix partagé, un fichier JSON valide devrait être généré contenant toutes les données sélectionnées.
+**Valide: Exigences 14.2**
+
+#### Propriété 43: Détection de Doublons à l'Import
+*Pour tout* import de données, si des doublons existent (même produit, même magasin, même date), ils devraient être détectés et signalés.
+**Valide: Exigences 14.4**
+
+#### Propriété 44: Génération de Rapport PDF
+*Pour tout* ensemble de produits sélectionnés, un rapport PDF de comparaison devrait être généré avec succès.
+**Valide: Exigences 15.1**
+
+#### Propriété 45: Inclusion de Graphiques dans le Rapport
+*Pour tout* rapport généré avec l'option "inclure graphiques", au moins un graphique de comparaison devrait être présent dans le PDF.
+**Valide: Exigences 15.2**
+
+#### Propriété 46: Calcul de l'Économie Totale dans le Rapport
+*Pour tout* rapport généré, l'économie totale potentielle affichée devrait être égale à la somme des différences (max - min) pour chaque produit.
+**Valide: Exigences 15.3**
+
+#### Propriété 47: Inclusion des Statistiques dans le Rapport
+*Pour tout* rapport généré, un résumé statistique (moyenne, médiane, écart-type) devrait être inclus pour chaque produit.
+**Valide: Exigences 15.5**
+
+#### Propriété 48: Marquage de Complétion de l'Onboarding
+*Pour tout* utilisateur qui complète l'onboarding, un flag devrait être persisté localement indiquant que l'onboarding a été complété.
+**Valide: Exigences 16.3**
+
+#### Propriété 49: Persistance de l'État "Aide Vue"
+*Pour toute* aide contextuelle consultée, l'état "vue" devrait être persisté et l'aide ne devrait plus s'afficher automatiquement lors des prochaines visites.
+**Valide: Exigences 17.5**
+
+#### Propriété 50: Fonctionnalité d'Annulation
+*Pour toute* action récente (création, modification, suppression), l'utilisateur devrait pouvoir annuler l'action dans les 5 secondes suivant son exécution.
+**Valide: Exigences 18.6**
+
+#### Propriété 51: Validation des Prix
+*Pour toute* saisie de prix, la validation devrait rejeter les valeurs non numériques, négatives ou nulles.
+**Valide: Exigences 19.1**
+
+#### Propriété 52: Validation des Noms de Produits
+*Pour toute* saisie de nom de produit, la validation devrait rejeter les chaînes vides ou contenant moins de 2 caractères.
+**Valide: Exigences 19.2**
+
+#### Propriété 53: Validation des Noms de Magasins
+*Pour toute* saisie de nom de magasin, la validation devrait rejeter les chaînes vides.
+**Valide: Exigences 19.3**
+
+#### Propriété 54: Blocage de Soumission avec Erreurs
+*Pour tout* formulaire contenant des erreurs de validation, le bouton de soumission devrait être désactivé ou la soumission devrait être bloquée.
+**Valide: Exigences 19.6**
+
+### Cas Limites et Exemples Spécifiques
+
+#### Exemple 1: Thème par Défaut au Premier Lancement
+Au premier lancement de l'application, si le système d'exploitation a un thème défini (clair ou sombre), l'application devrait utiliser ce thème par défaut.
+**Valide: Exigences 2.4**
+
+#### Exemple 2: Autocomplétion sans Résultats
+Lorsqu'une requête d'autocomplétion ne correspond à aucune entrée dans l'historique, l'utilisateur devrait pouvoir continuer la saisie libre sans restriction.
+**Valide: Exigences 3.4**
+
+#### Exemple 3: Catégorie par Défaut
+Lorsqu'un produit n'a pas de catégorie assignée (categoryId est null), il devrait être affiché dans la catégorie "Autres".
+**Valide: Exigences 4.4**
+
+#### Cas Limite 1: Graphique avec Données Insuffisantes
+Lorsque moins de 2 points de données sont disponibles pour un graphique, un message explicatif devrait être affiché au lieu d'un graphique vide.
+**Valide: Exigences 5.6**
+
+#### Exemple 4: Erreur OCR sans Texte
+Lorsque l'OCR ne détecte aucun texte dans une image, un message d'erreur explicatif avec des suggestions d'amélioration (meilleur éclairage, recadrage) devrait être affiché.
+**Valide: Exigences 9.5**
+
+#### Exemple 5: Compaction de la Base de Données
+Lorsque la taille de la base de données Hive dépasse 50MB, une opération de compaction devrait être déclenchée automatiquement.
+**Valide: Exigences 10.5**
+
+#### Exemple 6: Erreur Réseau
+Lorsqu'une erreur réseau survient, un message spécifique devrait être affiché avec une option "Réessayer".
+**Valide: Exigences 11.3**
+
+#### Exemple 7: Stockage Plein
+Lorsque le stockage est plein, un message devrait informer l'utilisateur et proposer de nettoyer les anciennes données.
+**Valide: Exigences 11.4**
+
+#### Exemple 8: Premier Lancement - Onboarding
+Au premier lancement de l'application (flag onboardingCompleted = false), l'écran d'onboarding avec 3-5 slides devrait être affiché.
+**Valide: Exigences 16.1**
+
+#### Cas Limite 2: Avertissement Prix Élevé
+Lorsqu'un utilisateur saisit un prix supérieur à 10 000 000 FCFA, un avertissement de confirmation devrait être affiché avant d'accepter la valeur.
+**Valide: Exigences 19.7**
+
+## Stratégie de Test
+
+### Approche Duale de Test
+
+L'application PrixIvoire utilisera une approche combinant tests unitaires et tests basés sur les propriétés (Property-Based Testing) pour assurer une couverture complète et une robustesse maximale.
+
+#### Tests Unitaires
+
+Les tests unitaires se concentrent sur :
+- **Exemples spécifiques** : Cas d'usage concrets et scénarios réels
+- **Cas limites** : Valeurs extrêmes, données vides, valeurs nulles
+- **Conditions d'erreur** : Gestion des exceptions et erreurs
+- **Points d'intégration** : Interactions entre composants
+
+**Exemples de tests unitaires** :
+- Tester que l'ajout d'un produit avec un prix de 1000 FCFA fonctionne correctement
+- Tester que la suppression d'un favori met à jour la liste
+- Tester que l'import d'un fichier JSON invalide génère une erreur appropriée
+- Tester que le premier lancement affiche l'onboarding
+
+#### Tests Basés sur les Propriétés (Property-Based Testing)
+
+Les tests de propriétés vérifient des invariants universels sur de nombreuses entrées générées aléatoirement.
+
+**Bibliothèque** : Nous utiliserons le package `faker` pour la génération de données et créerons un framework de PBT personnalisé pour Flutter/Dart.
+
+**Configuration** :
+- Minimum 100 itérations par test de propriété
+- Génération aléatoire de données avec contraintes appropriées
+- Shrinking automatique pour trouver le cas minimal d'échec
+
+**Format de Tag** :
+Chaque test de propriété doit inclure un commentaire de référence :
+```dart
+// Feature: prixivoire-complete-implementation, Property 13: Correction des Calculs Statistiques
+test('Statistics calculations are correct for any set of prices', () {
+  // Test implementation
+});
+```
+
+**Exemples de tests de propriétés** :
+- Pour tout ensemble de prix, la moyenne calculée devrait être correcte
+- Pour toute requête d'autocomplétion, le nombre de suggestions ne devrait jamais dépasser 10
+- Pour tout filtrage par catégorie, seuls les produits de cette catégorie devraient être retournés
+- Pour tout export CSV, le fichier devrait être un CSV valide
+
+### Équilibre des Tests
+
+**Éviter trop de tests unitaires** : Les tests de propriétés couvrent déjà de nombreux cas d'entrée. Les tests unitaires doivent se concentrer sur :
+- Les exemples qui illustrent clairement le comportement attendu
+- Les cas limites spécifiques non couverts par les propriétés
+- Les scénarios d'intégration complexes
+
+**Complémentarité** :
+- Tests unitaires : Validation de cas concrets et d'intégrations
+- Tests de propriétés : Validation de règles universelles et de robustesse
+
+### Couverture de Test
+
+**Objectifs de couverture** :
+- Modèles de données : 80% minimum
+- Services : 80% minimum
+- Widgets : Tests pour tous les écrans principaux
+- Intégration : Tests pour les flux critiques (ajout de prix, scan OCR, export)
+
+**Flux critiques à tester** :
+1. Ajout manuel d'un prix → Sauvegarde → Récupération
+2. Scan OCR → Extraction → Correction → Sauvegarde
+3. Filtrage multi-critères → Affichage des résultats
+4. Export CSV/PDF → Génération → Validation du fichier
+5. Changement de thème → Persistance → Rechargement
+
+### Organisation des Tests
+
+```
+test/
+├── unit/
+│   ├── models/
+│   │   ├── product_price_test.dart
+│   │   ├── statistics_test.dart
+│   │   └── app_settings_test.dart
+│   ├── services/
+│   │   ├── storage_service_test.dart
+│   │   ├── ocr_service_test.dart
+│   │   ├── cache_manager_test.dart
+│   │   ├── export_service_test.dart
+│   │   └── statistics_engine_test.dart
+│   └── utils/
+│       ├── validation_service_test.dart
+│       └── error_handler_test.dart
+├── property/
+│   ├── statistics_properties_test.dart
+│   ├── filtering_properties_test.dart
+│   ├── autocomplete_properties_test.dart
+│   ├── validation_properties_test.dart
+│   └── cache_properties_test.dart
+├── widget/
+│   ├── home_screen_test.dart
+│   ├── add_price_screen_test.dart
+│   ├── comparison_screen_test.dart
+│   └── trends_screen_test.dart
+└── integration/
+    ├── add_price_flow_test.dart
+    ├── ocr_scan_flow_test.dart
+    ├── export_flow_test.dart
+    └── theme_persistence_flow_test.dart
+```
+
+### Mocks et Dépendances
+
+**Stratégie de Mocking** :
+- Utiliser `mockito` pour créer des mocks des services
+- Isoler les dépendances externes (Hive, OCR, système de fichiers)
+- Créer des fixtures pour les données de test
+
+**Exemples de mocks nécessaires** :
+- `MockStorageService` : Pour tester sans accès réel à Hive
+- `MockOCRService` : Pour tester sans traitement d'image réel
+- `MockFileSystem` : Pour tester l'export sans écriture réelle de fichiers
+
+### Performance des Tests
+
+**Objectif** : Suite de tests complète en moins de 5 minutes
+
+**Optimisations** :
+- Parallélisation des tests indépendants
+- Utilisation de mocks pour éviter les opérations I/O lentes
+- Tests de propriétés avec 100 itérations (équilibre entre couverture et vitesse)
+- Tests d'intégration ciblés sur les flux critiques uniquement
+
+### Intégration Continue
+
+**Pipeline CI/CD** :
+1. Linting et formatage du code
+2. Analyse statique (dart analyze)
+3. Tests unitaires
+4. Tests de propriétés
+5. Tests de widgets
+6. Tests d'intégration
+7. Rapport de couverture
+
+**Seuils de qualité** :
+- Couverture minimale : 80%
+- Aucun warning d'analyse statique
+- Tous les tests doivent passer
+
+## Notes d'Implémentation
+
+### Priorités de Développement
+
+1. **Phase 1 - Fondations** :
+   - Système de thèmes
+   - Optimisation du stockage Hive
+   - Gestion d'erreurs robuste
+   - Validation des données
+
+2. **Phase 2 - Fonctionnalités Avancées** :
+   - Autocomplétion
+   - Système de catégories
+   - Filtres avancés
+   - Système de favoris
+
+3. **Phase 3 - Analyse et Visualisation** :
+   - Moteur de statistiques
+   - Graphiques améliorés
+   - Système de cache
+
+4. **Phase 4 - OCR et Performance** :
+   - Optimisation OCR
+   - Prétraitement d'images
+   - Performance de recherche
+
+5. **Phase 5 - Export et Partage** :
+   - Export multi-formats
+   - Génération de rapports
+   - Partage de données
+
+6. **Phase 6 - Expérience Utilisateur** :
+   - Onboarding
+   - Aide contextuelle
+   - Feedback utilisateur amélioré
+
+### Considérations Techniques
+
+**Performance** :
+- Utiliser `compute()` pour les opérations lourdes (OCR, statistiques sur grands ensembles)
+- Implémenter le lazy loading avec `ListView.builder`
+- Optimiser les requêtes Hive avec des index appropriés
+- Utiliser `const` constructors pour les widgets statiques
+
+**Accessibilité** :
+- Définir `semanticsLabel` pour tous les widgets interactifs
+- Supporter la navigation au clavier
+- Tester avec TalkBack (Android) et VoiceOver (iOS)
+- Respecter les tailles de police système
+
+**Internationalisation** :
+- Préparer l'architecture pour le support multi-langues (même si initialement en français)
+- Utiliser le package `intl` pour les formats de date et nombres
+- Externaliser toutes les chaînes de caractères
+
+**Sécurité** :
+- Valider toutes les entrées utilisateur
+- Sanitiser les données avant l'export
+- Gérer les permissions de manière appropriée (stockage, caméra)
+- Ne pas logger d'informations sensibles
+
+**Maintenabilité** :
+- Suivre les principes SOLID
+- Documenter les fonctions complexes
+- Utiliser des noms de variables descriptifs
+- Maintenir une architecture en couches claire
+
