@@ -113,23 +113,23 @@ class _AddAlertScreenState extends State<AddAlertScreen> {
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
-            RadioListTile<bool>(
-              title: const Text('Alerte si prix au-dessus du seuil'),
-              value: true,
-              groupValue: _isAbove,
-              onChanged: (value) {
+            SegmentedButton<bool>(
+              segments: const [
+                ButtonSegment<bool>(
+                  value: true,
+                  label: Text('Au-dessus'),
+                  icon: Icon(Icons.arrow_upward),
+                ),
+                ButtonSegment<bool>(
+                  value: false,
+                  label: Text('En-dessous'),
+                  icon: Icon(Icons.arrow_downward),
+                ),
+              ],
+              selected: {_isAbove},
+              onSelectionChanged: (Set<bool> newSelection) {
                 setState(() {
-                  _isAbove = value!;
-                });
-              },
-            ),
-            RadioListTile<bool>(
-              title: const Text('Alerte si prix en-dessous du seuil'),
-              value: false,
-              groupValue: _isAbove,
-              onChanged: (value) {
-                setState(() {
-                  _isAbove = value!;
+                  _isAbove = newSelection.first;
                 });
               },
             ),

@@ -8,6 +8,7 @@ import 'price_comparison_screen.dart';
 import 'trends_screen.dart';
 import 'alerts_screen.dart';
 import 'export_import_screen.dart';
+import 'product_search_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   final StorageService storageService;
@@ -191,6 +192,26 @@ class _HomeScreenState extends State<HomeScreen> {
                 label: const Text('Mes alertes'),
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 16),
+                ),
+              ),
+              const SizedBox(height: 8),
+              ElevatedButton.icon(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ProductSearchScreen(
+                        storageService: widget.storageService,
+                      ),
+                    ),
+                  ).then((_) => _loadRecentPrices());
+                },
+                icon: const Icon(Icons.search),
+                label: const Text('Rechercher en ligne'),
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  backgroundColor: Theme.of(context).colorScheme.secondary,
+                  foregroundColor: Colors.white,
                 ),
               ),
               const SizedBox(height: 8),

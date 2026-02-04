@@ -7,24 +7,32 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:prixivoire/main.dart';
+import 'package:prixivoire/services/storage_service.dart';
+import 'package:prixivoire/services/notification_service.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
+  testWidgets('App starts correctly', (WidgetTester tester) async {
+    // Initialiser Hive pour les tests
+    await Hive.initFlutter();
+    
+    // Initialiser les services
+    final storageService = StorageService();
+    await storageService.init();
+    
+    final notificationService = NotificationService(storageService);
+    await notificationService.init();
+
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+    await tester.pumpWidget(
+      PrixIvoireApp(
+        storageService: storageService,
+        notificationService: notificationService,
+      ),
+    );
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
-
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
-
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    // Vérifier que l'application se construit correctement
+    expect(find.byType(MaterialApp), findsOneWidget);
   });
 }
