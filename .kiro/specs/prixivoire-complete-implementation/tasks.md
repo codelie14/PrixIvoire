@@ -92,21 +92,21 @@ Ce plan d'implémentation décompose les améliorations de PrixIvoire en tâches
 
 ### Phase 2 : Système de Thèmes et Accessibilité
 
-- [ ] 5. Implémenter le système de thèmes
-  - [ ] 5.1 Créer ThemeManager
+- [x] 5. Implémenter le système de thèmes
+  - [x] 5.1 Créer ThemeManager
     - Implémenter loadTheme() pour charger depuis Hive
     - Implémenter setTheme() pour sauvegarder le choix
     - Créer getLightTheme() avec Material Design 3
     - Créer getDarkTheme() avec Material Design 3
     - _Exigences: 2.1, 2.2, 2.3_
   
-  - [ ] 5.2 Définir les ColorScheme personnalisés
+  - [x] 5.2 Définir les ColorScheme personnalisés
     - Créer un ColorScheme clair avec contrastes WCAG AA
     - Créer un ColorScheme sombre avec contrastes WCAG AA
     - Définir les couleurs pour tous les composants Material
     - _Exigences: 1.1, 1.5_
   
-  - [ ] 5.3 Intégrer ThemeManager dans l'application
+  - [x] 5.3 Intégrer ThemeManager dans l'application
     - Utiliser Provider ou Riverpod pour la gestion d'état du thème
     - Appliquer le thème au MaterialApp
     - Implémenter le changement de thème en temps réel

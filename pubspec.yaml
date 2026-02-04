@@ -68,6 +68,9 @@ dependencies:
   # Scraping web pour la recherche de produits
   http: ^1.2.2
   html: ^0.15.4
+  
+  # Gestion d'état
+  provider: ^6.1.2
 
 dev_dependencies:
   flutter_test:

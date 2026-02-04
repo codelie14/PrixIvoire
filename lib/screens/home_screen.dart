@@ -10,6 +10,7 @@ import 'trends_screen.dart';
 import 'alerts_screen.dart';
 import 'export_import_screen.dart';
 import 'product_search_screen.dart';
+import 'settings_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   final StorageService storageService;
@@ -51,8 +52,21 @@ class _HomeScreenState extends State<HomeScreen> {
         foregroundColor: Colors.white,
         actions: [
           IconButton(
+            icon: const Icon(Icons.settings),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const SettingsScreen(),
+                ),
+              );
+            },
+            tooltip: 'Paramètres',
+          ),
+          IconButton(
             icon: const Icon(Icons.refresh),
             onPressed: _loadRecentPrices,
+            tooltip: 'Actualiser',
           ),
         ],
       ),
