@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../services/storage_service.dart';
 import '../services/notification_service.dart';
+import '../services/category_manager.dart';
 import '../models/product_price.dart';
 
 class AddPriceScreen extends StatefulWidget {
@@ -18,7 +19,9 @@ class _AddPriceScreenState extends State<AddPriceScreen> {
   final _productNameController = TextEditingController();
   final _priceController = TextEditingController();
   final _shopController = TextEditingController();
+  final _categoryManager = CategoryManager();
   DateTime _selectedDate = DateTime.now();
+  String? _selectedCategoryId;
   NotificationService? _notificationService;
 
   @override
@@ -53,6 +56,7 @@ class _AddPriceScreenState extends State<AddPriceScreen> {
         price: double.parse(_priceController.text),
         shop: _shopController.text.trim(),
         date: _selectedDate,
+        categoryId: _selectedCategoryId,
       );
 
       await widget.storageService.addProductPrice(productPrice);
@@ -145,6 +149,38 @@ class _AddPriceScreenState extends State<AddPriceScreen> {
                 }
                 return null;
               },
+            ),
+            const SizedBox(height: 16),
+            Semantics(
+              label: 'Sélectionner une catégorie',
+              button: true,
+              child: DropdownButtonFormField<String>(
+                initialValue: _selectedCategoryId,
+                decoration: const InputDecoration(
+                  labelText: 'Catégorie',
+                  hintText: 'Sélectionner une catégorie',
+                  border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.category),
+                ),
+                items: _categoryManager.getAllCategories().map((category) {
+                  return DropdownMenuItem<String>(
+                    value: category.id,
+                    child: Row(
+                      children: [
+                        Icon(category.icon, color: category.color, size: 20),
+                        const SizedBox(width: 8),
+                        Text(category.name),
+                      ],
+                    ),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    _selectedCategoryId = value;
+                  });
+                },
+                hint: const Text('Autres (par défaut)'),
+              ),
             ),
             const SizedBox(height: 16),
             Semantics(

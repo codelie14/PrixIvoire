@@ -251,15 +251,15 @@ Ce plan d'implémentation décompose les améliorations de PrixIvoire en tâches
     - _Exigences: 3.4_
 
 
-- [ ] 12. Implémenter le système de catégories
-  - [ ] 12.1 Créer CategoryManager
+- [x] 12. Implémenter le système de catégories
+  - [x] 12.1 Créer CategoryManager
     - Définir les catégories prédéfinies avec icônes et couleurs
     - Implémenter getCategoryById()
     - Implémenter filterByCategory()
     - Implémenter getCategoryCounts()
     - _Exigences: 4.1, 4.3, 4.5_
   
-  - [ ] 12.2 Intégrer les catégories dans l'interface
+  - [x] 12.2 Intégrer les catégories dans l'interface
     - Ajouter un sélecteur de catégorie dans AddPriceScreen
     - Créer un écran de filtrage par catégorie
     - Afficher les comptages par catégorie

@@ -13,6 +13,7 @@ import 'alerts_screen.dart';
 import 'export_import_screen.dart';
 import 'product_search_screen.dart';
 import 'settings_screen.dart';
+import 'category_filter_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   final StorageService storageService;
@@ -216,6 +217,28 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
 
               // Boutons de navigation
+              Semantics(
+                label: 'Filtrer par catégorie',
+                button: true,
+                child: ElevatedButton.icon(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      FadeSlidePageRoute(
+                        page: CategoryFilterScreen(
+                          storageService: widget.storageService,
+                        ),
+                      ),
+                    );
+                  },
+                  icon: const Icon(Icons.category),
+                  label: const Text('Filtrer par catégorie'),
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 8),
               Semantics(
                 label: 'Voir tous les prix enregistrés',
                 button: true,
