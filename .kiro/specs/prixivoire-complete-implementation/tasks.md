@@ -63,8 +63,8 @@ Ce plan d'implémentation décompose les améliorations de PrixIvoire en tâches
     - **Valide: Exigences 11.1, 11.2**
 
 
-- [ ] 3. Implémenter le système de validation
-  - [ ] 3.1 Créer ValidationService
+- [x] 3. Implémenter le système de validation
+  - [x] 3.1 Créer ValidationService
     - Implémenter validatePrice() avec règles (positif, numérique, max 10M)
     - Implémenter validateProductName() (min 2 caractères, max 100)
     - Implémenter validateStoreName() (non vide, max 50)
