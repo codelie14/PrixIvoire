@@ -38,20 +38,20 @@ Ce plan d'implémentation décompose les améliorations de PrixIvoire en tâches
     - **Propriété 48: Marquage de Complétion de l'Onboarding**
     - **Valide: Exigences 8.2, 16.3**
 
-- [ ] 2. Implémenter le système de gestion d'erreurs
-  - [ ] 2.1 Créer la hiérarchie d'exceptions personnalisées
+- [x] 2. Implémenter le système de gestion d'erreurs
+  - [x] 2.1 Créer la hiérarchie d'exceptions personnalisées
     - Définir AppException comme classe de base
     - Créer StorageException, OCRException, ValidationException, NetworkException, ExportException
     - Ajouter les champs message, code, originalError
     - _Exigences: 11.1, 11.2_
   
-  - [ ] 2.2 Implémenter ErrorHandler
+  - [x] 2.2 Implémenter ErrorHandler
     - Créer la méthode getUserFriendlyMessage() pour traduire les erreurs
     - Implémenter logError() pour le logging avec contexte
     - Ajouter les messages d'erreur en français pour chaque type
     - _Exigences: 11.1, 11.2, 11.3, 11.4_
   
-  - [ ] 2.3 Créer SafeExecutor pour l'encapsulation des opérations
+  - [x] 2.3 Créer SafeExecutor pour l'encapsulation des opérations
     - Implémenter la méthode execute() avec try-catch
     - Ajouter la gestion du loading indicator
     - Intégrer l'affichage des SnackBar de succès/erreur
