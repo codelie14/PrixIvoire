@@ -48,36 +48,31 @@ class _AddAlertScreenState extends State<AddAlertScreen> {
 
     if (products.isEmpty) {
       return Scaffold(
-        appBar: AppBar(
-          title: const Text('Créer une alerte'),
-        ),
+        appBar: AppBar(title: const Text('Créer une alerte')),
         body: const Center(
-          child: Text('Aucun produit enregistré. Veuillez d\'abord ajouter des prix.'),
+          child: Text(
+            'Aucun produit enregistré. Veuillez d\'abord ajouter des prix.',
+          ),
         ),
       );
     }
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Créer une alerte'),
-      ),
+      appBar: AppBar(title: const Text('Créer une alerte')),
       body: Form(
         key: _formKey,
         child: ListView(
           padding: const EdgeInsets.all(16.0),
           children: [
             DropdownButtonFormField<String>(
-              value: _selectedProduct,
+              initialValue: _selectedProduct,
               decoration: const InputDecoration(
                 labelText: 'Produit',
                 border: OutlineInputBorder(),
                 prefixIcon: Icon(Icons.shopping_bag),
               ),
               items: products.map((product) {
-                return DropdownMenuItem(
-                  value: product,
-                  child: Text(product),
-                );
+                return DropdownMenuItem(value: product, child: Text(product));
               }).toList(),
               onChanged: (value) {
                 setState(() {

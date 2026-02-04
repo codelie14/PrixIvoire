@@ -66,19 +66,19 @@ class _PriceComparisonScreenState extends State<PriceComparisonScreen> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       DropdownButtonFormField<String>(
-                        value: _selectedProduct,
-                        decoration: const InputDecoration(
-                          labelText: 'Produit',
-                        ),
+                        initialValue: _selectedProduct,
+                        decoration: const InputDecoration(labelText: 'Produit'),
                         items: [
                           const DropdownMenuItem<String>(
                             value: null,
                             child: Text('Tous les produits'),
                           ),
-                          ...products.map((product) => DropdownMenuItem(
-                            value: product,
-                            child: Text(product),
-                          )),
+                          ...products.map(
+                            (product) => DropdownMenuItem(
+                              value: product,
+                              child: Text(product),
+                            ),
+                          ),
                         ],
                         onChanged: (value) {
                           setState(() {
@@ -90,19 +90,19 @@ class _PriceComparisonScreenState extends State<PriceComparisonScreen> {
                       ),
                       const SizedBox(height: 16),
                       DropdownButtonFormField<String>(
-                        value: _selectedShop,
-                        decoration: const InputDecoration(
-                          labelText: 'Magasin',
-                        ),
+                        initialValue: _selectedShop,
+                        decoration: const InputDecoration(labelText: 'Magasin'),
                         items: [
                           const DropdownMenuItem<String>(
                             value: null,
                             child: Text('Tous les magasins'),
                           ),
-                          ...shops.map((shop) => DropdownMenuItem(
-                            value: shop,
-                            child: Text(shop),
-                          )),
+                          ...shops.map(
+                            (shop) => DropdownMenuItem(
+                              value: shop,
+                              child: Text(shop),
+                            ),
+                          ),
                         ],
                         onChanged: (value) {
                           setState(() {
@@ -138,9 +138,7 @@ class _PriceComparisonScreenState extends State<PriceComparisonScreen> {
         ],
       ),
       body: _filteredPrices.isEmpty
-          ? const Center(
-              child: Text('Aucun prix enregistré'),
-            )
+          ? const Center(child: Text('Aucun prix enregistré'))
           : ListView.builder(
               itemCount: _filteredPrices.length,
               itemBuilder: (context, index) {

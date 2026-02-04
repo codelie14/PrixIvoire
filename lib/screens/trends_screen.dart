@@ -28,7 +28,7 @@ class _TrendsScreenState extends State<TrendsScreen> {
   List<ProductPrice> _getProductPrices(String productName) {
     final prices = widget.storageService.getProductPricesByProduct(productName);
     prices.sort((a, b) => a.date.compareTo(b.date));
-    
+
     // Limiter aux 30 derniers jours
     final thirtyDaysAgo = DateTime.now().subtract(const Duration(days: 30));
     return prices.where((p) => p.date.isAfter(thirtyDaysAgo)).toList();
@@ -40,40 +40,29 @@ class _TrendsScreenState extends State<TrendsScreen> {
 
     if (products.isEmpty) {
       return Scaffold(
-        appBar: AppBar(
-          title: const Text('Tendances des prix'),
-        ),
-        body: const Center(
-          child: Text('Aucun produit enregistré'),
-        ),
+        appBar: AppBar(title: const Text('Tendances des prix')),
+        body: const Center(child: Text('Aucun produit enregistré')),
       );
     }
 
-    if (_selectedProduct == null) {
-      _selectedProduct = products.first;
-    }
+    _selectedProduct ??= products.first;
 
     final prices = _getProductPrices(_selectedProduct!);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Tendances des prix'),
-      ),
+      appBar: AppBar(title: const Text('Tendances des prix')),
       body: Column(
         children: [
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: DropdownButtonFormField<String>(
-              value: _selectedProduct,
+              initialValue: _selectedProduct,
               decoration: const InputDecoration(
                 labelText: 'Sélectionner un produit',
                 border: OutlineInputBorder(),
               ),
               items: products.map((product) {
-                return DropdownMenuItem(
-                  value: product,
-                  child: Text(product),
-                );
+                return DropdownMenuItem(value: product, child: Text(product));
               }).toList(),
               onChanged: (value) {
                 setState(() {
@@ -84,9 +73,7 @@ class _TrendsScreenState extends State<TrendsScreen> {
           ),
           Expanded(
             child: prices.isEmpty
-                ? const Center(
-                    child: Text('Aucune donnée pour ce produit'),
-                  )
+                ? const Center(child: Text('Aucune donnée pour ce produit'))
                 : Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: LineChart(
@@ -146,10 +133,16 @@ class _TrendsScreenState extends State<TrendsScreen> {
                         ],
                         minY: prices.isEmpty
                             ? 0
-                            : prices.map((p) => p.price).reduce((a, b) => a < b ? a : b) * 0.9,
+                            : prices
+                                      .map((p) => p.price)
+                                      .reduce((a, b) => a < b ? a : b) *
+                                  0.9,
                         maxY: prices.isEmpty
                             ? 1000
-                            : prices.map((p) => p.price).reduce((a, b) => a > b ? a : b) * 1.1,
+                            : prices
+                                      .map((p) => p.price)
+                                      .reduce((a, b) => a > b ? a : b) *
+                                  1.1,
                       ),
                     ),
                   ),
