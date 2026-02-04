@@ -1,7 +1,7 @@
 ## **Cahier des Charges : PrixIvoire**
 **Version 1.0**
 **Date : 03/02/2026**
-**Rédigé pour : InformatiX AI**
+**Rédigé pour : IndraLabs**
 
 ---
 

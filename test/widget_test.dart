@@ -11,6 +11,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:prixivoire/main.dart';
 import 'package:prixivoire/services/storage_service.dart';
 import 'package:prixivoire/services/notification_service.dart';
+import 'package:prixivoire/services/cache_service.dart';
 
 void main() {
   testWidgets('App starts correctly', (WidgetTester tester) async {
@@ -24,11 +25,15 @@ void main() {
     final notificationService = NotificationService(storageService);
     await notificationService.init();
 
+    final cacheService = CacheService();
+    await cacheService.init();
+
     // Build our app and trigger a frame.
     await tester.pumpWidget(
       PrixIvoireApp(
         storageService: storageService,
         notificationService: notificationService,
+        cacheService: cacheService,
       ),
     );
 

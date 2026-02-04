@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../services/storage_service.dart';
+import '../services/cache_service.dart';
 import '../models/product_price.dart';
 import 'add_price_screen.dart';
 import 'scan_screen.dart';
@@ -12,8 +13,13 @@ import 'product_search_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   final StorageService storageService;
+  final CacheService cacheService;
 
-  const HomeScreen({super.key, required this.storageService});
+  const HomeScreen({
+    super.key,
+    required this.storageService,
+    required this.cacheService,
+  });
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -202,6 +208,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     MaterialPageRoute(
                       builder: (context) => ProductSearchScreen(
                         storageService: widget.storageService,
+                        cacheService: widget.cacheService,
                       ),
                     ),
                   ).then((_) => _loadRecentPrices());
