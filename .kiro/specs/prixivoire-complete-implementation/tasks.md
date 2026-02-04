@@ -277,22 +277,22 @@ Ce plan d'implémentation décompose les améliorations de PrixIvoire en tâches
     - _Exigences: 4.4_
 
 
-- [ ] 13. Implémenter le système de favoris
-  - [ ] 13.1 Créer FavoritesManager
+- [x] 13. Implémenter le système de favoris
+  - [x] 13.1 Créer FavoritesManager
     - Implémenter addFavorite() et removeFavorite()
     - Implémenter isFavorite() pour vérifier le statut
     - Implémenter getFavoriteProducts()
     - Persister dans Hive avec loadFavorites() et saveFavorites()
     - _Exigences: 8.2, 8.4, 8.5_
   
-  - [ ] 13.2 Créer l'écran des favoris
+  - [x] 13.2 Créer l'écran des favoris
     - Créer FavoritesScreen avec liste des produits favoris
     - Afficher le dernier prix connu pour chaque favori
     - Ajouter un bouton pour retirer des favoris
     - Intégrer dans la navigation principale
     - _Exigences: 8.3, 8.5_
   
-  - [ ] 13.3 Ajouter l'icône favori dans les écrans de produits
+  - [x] 13.3 Ajouter l'icône favori dans les écrans de produits
     - Ajouter une icône étoile dans les listes de produits
     - Ajouter une icône étoile dans les détails de produit
     - Gérer le toggle favori/non-favori

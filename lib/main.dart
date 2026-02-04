@@ -3,6 +3,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'services/storage_service.dart';
 import 'services/notification_service.dart';
+import 'services/favorites_manager.dart';
 import 'screens/home_screen.dart';
 import 'adapters/product_price_adapter.dart';
 import 'adapters/price_alert_adapter.dart';
@@ -41,6 +42,10 @@ void main() async {
 
   final notificationService = NotificationService(storageService);
   await notificationService.init();
+  
+  // Initialiser le FavoritesManager
+  final favoritesManager = FavoritesManager(storageService);
+  await favoritesManager.initialize();
 
   // Nettoyer les données anciennes
   await storageService.cleanOldData();
@@ -56,6 +61,7 @@ void main() async {
         storageService: storageService,
         notificationService: notificationService,
         cacheService: cacheService,
+        favoritesManager: favoritesManager,
       ),
     ),
   );
@@ -65,12 +71,14 @@ class PrixIvoireApp extends StatelessWidget {
   final StorageService storageService;
   final NotificationService notificationService;
   final CacheService cacheService;
+  final FavoritesManager favoritesManager;
 
   const PrixIvoireApp({
     super.key,
     required this.storageService,
     required this.notificationService,
     required this.cacheService,
+    required this.favoritesManager,
   });
 
   @override
@@ -85,6 +93,7 @@ class PrixIvoireApp extends StatelessWidget {
           home: HomeScreen(
             storageService: storageService,
             cacheService: cacheService,
+            favoritesManager: favoritesManager,
           ),
           debugShowCheckedModeBanner: false,
         );

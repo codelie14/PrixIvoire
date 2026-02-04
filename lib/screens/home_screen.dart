@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import '../services/storage_service.dart';
 import '../services/optimized_storage_service.dart';
 import '../services/cache_service.dart';
+import '../services/favorites_manager.dart';
 import '../models/product_price.dart';
 import '../core/utils/page_transitions.dart';
 import 'add_price_screen.dart';
@@ -14,17 +15,20 @@ import 'export_import_screen.dart';
 import 'product_search_screen.dart';
 import 'settings_screen.dart';
 import 'category_filter_screen.dart';
+import 'favorites_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   final StorageService storageService;
   final CacheService cacheService;
   final OptimizedStorageService? optimizedStorageService;
+  final FavoritesManager? favoritesManager;
 
   const HomeScreen({
     super.key,
     required this.storageService,
     required this.cacheService,
     this.optimizedStorageService,
+    this.favoritesManager,
   });
 
   @override
@@ -239,6 +243,31 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               const SizedBox(height: 8),
+              if (widget.favoritesManager != null)
+                Semantics(
+                  label: 'Voir mes produits favoris',
+                  button: true,
+                  child: ElevatedButton.icon(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        FadeSlidePageRoute(
+                          page: FavoritesScreen(
+                            favoritesManager: widget.favoritesManager!,
+                          ),
+                        ),
+                      ).then((_) => _loadRecentPrices());
+                    },
+                    icon: const Icon(Icons.star),
+                    label: const Text('Mes Favoris'),
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      backgroundColor: Colors.amber,
+                      foregroundColor: Colors.black87,
+                    ),
+                  ),
+                ),
+              const SizedBox(height: 8),
               Semantics(
                 label: 'Voir tous les prix enregistrés',
                 button: true,
@@ -249,6 +278,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       FadeSlidePageRoute(
                         page: PriceComparisonScreen(
                           storageService: widget.storageService,
+                          favoritesManager: widget.favoritesManager,
                         ),
                       ),
                     );
