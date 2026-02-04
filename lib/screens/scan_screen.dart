@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import '../services/storage_service.dart';
 import '../services/ocr_service.dart';
+import '../core/utils/page_transitions.dart';
 import 'add_price_screen.dart';
 
 class ScanScreen extends StatefulWidget {
@@ -101,23 +102,31 @@ class _ScanScreenState extends State<ScanScreen> {
             Row(
               children: [
                 Expanded(
-                  child: ElevatedButton.icon(
-                    onPressed: _takePhoto,
-                    icon: const Icon(Icons.camera_alt),
-                    label: const Text('Prendre une photo'),
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 16),
+                  child: Semantics(
+                    label: 'Prendre une photo avec l\'appareil',
+                    button: true,
+                    child: ElevatedButton.icon(
+                      onPressed: _takePhoto,
+                      icon: const Icon(Icons.camera_alt),
+                      label: const Text('Prendre une photo'),
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                      ),
                     ),
                   ),
                 ),
                 const SizedBox(width: 8),
                 Expanded(
-                  child: ElevatedButton.icon(
-                    onPressed: _pickImage,
-                    icon: const Icon(Icons.photo_library),
-                    label: const Text('Choisir une image'),
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 16),
+                  child: Semantics(
+                    label: 'Choisir une image depuis la galerie',
+                    button: true,
+                    child: ElevatedButton.icon(
+                      onPressed: _pickImage,
+                      icon: const Icon(Icons.photo_library),
+                      label: const Text('Choisir une image'),
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                      ),
                     ),
                   ),
                 ),
@@ -134,10 +143,14 @@ class _ScanScreenState extends State<ScanScreen> {
               ),
             
             if (_selectedImage != null && !_isProcessing) ...[
-              Image.file(
-                _selectedImage!,
-                height: 300,
-                fit: BoxFit.contain,
+              Semantics(
+                label: 'Image sélectionnée pour la reconnaissance de texte',
+                image: true,
+                child: Image.file(
+                  _selectedImage!,
+                  height: 300,
+                  fit: BoxFit.contain,
+                ),
               ),
               const SizedBox(height: 16),
             ],
@@ -175,22 +188,29 @@ class _ScanScreenState extends State<ScanScreen> {
               ),
               const SizedBox(height: 8),
               ..._extractedPrices.map((priceData) => Card(
-                child: ListTile(
-                  title: Text('${priceData['price'].toStringAsFixed(0)} FCFA'),
-                  subtitle: Text('Contexte: ${priceData['context']}'),
-                  trailing: IconButton(
-                    icon: const Icon(Icons.add),
-                    onPressed: () {
-                      // Ouvrir l'écran de saisie avec le prix pré-rempli
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => AddPriceScreen(
-                            storageService: widget.storageService,
-                          ),
-                        ),
-                      );
-                    },
+                child: Semantics(
+                  label: 'Prix détecté: ${priceData['price'].toStringAsFixed(0)} francs CFA',
+                  child: ListTile(
+                    title: Text('${priceData['price'].toStringAsFixed(0)} FCFA'),
+                    subtitle: Text('Contexte: ${priceData['context']}'),
+                    trailing: Semantics(
+                      label: 'Ajouter ce prix',
+                      button: true,
+                      child: IconButton(
+                        icon: const Icon(Icons.add),
+                        onPressed: () {
+                          // Ouvrir l'écran de saisie avec le prix pré-rempli
+                          Navigator.push(
+                            context,
+                            SlideUpPageRoute(
+                              page: AddPriceScreen(
+                                storageService: widget.storageService,
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
                   ),
                 ),
               )),

@@ -55,94 +55,100 @@ class _TrendsScreenState extends State<TrendsScreen> {
         children: [
           Padding(
             padding: const EdgeInsets.all(16.0),
-            child: DropdownButtonFormField<String>(
-              initialValue: _selectedProduct,
-              decoration: const InputDecoration(
-                labelText: 'Sélectionner un produit',
-                border: OutlineInputBorder(),
+            child: Semantics(
+              label: 'Sélectionner un produit pour voir ses tendances',
+              child: DropdownButtonFormField<String>(
+                initialValue: _selectedProduct,
+                decoration: const InputDecoration(
+                  labelText: 'Sélectionner un produit',
+                  border: OutlineInputBorder(),
+                ),
+                items: products.map((product) {
+                  return DropdownMenuItem(value: product, child: Text(product));
+                }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    _selectedProduct = value;
+                  });
+                },
               ),
-              items: products.map((product) {
-                return DropdownMenuItem(value: product, child: Text(product));
-              }).toList(),
-              onChanged: (value) {
-                setState(() {
-                  _selectedProduct = value;
-                });
-              },
             ),
           ),
           Expanded(
             child: prices.isEmpty
                 ? const Center(child: Text('Aucune donnée pour ce produit'))
-                : Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: LineChart(
-                      LineChartData(
-                        gridData: FlGridData(show: true),
-                        titlesData: FlTitlesData(
-                          leftTitles: AxisTitles(
-                            sideTitles: SideTitles(
-                              showTitles: true,
-                              reservedSize: 40,
-                              getTitlesWidget: (value, meta) {
-                                return Text(
-                                  '${value.toInt()}',
-                                  style: const TextStyle(fontSize: 10),
-                                );
-                              },
-                            ),
-                          ),
-                          bottomTitles: AxisTitles(
-                            sideTitles: SideTitles(
-                              showTitles: true,
-                              reservedSize: 30,
-                              getTitlesWidget: (value, meta) {
-                                if (value.toInt() < prices.length) {
-                                  final date = prices[value.toInt()].date;
+                : Semantics(
+                    label: 'Graphique des tendances de prix pour ${_selectedProduct ?? 'le produit sélectionné'}',
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: LineChart(
+                        LineChartData(
+                          gridData: FlGridData(show: true),
+                          titlesData: FlTitlesData(
+                            leftTitles: AxisTitles(
+                              sideTitles: SideTitles(
+                                showTitles: true,
+                                reservedSize: 40,
+                                getTitlesWidget: (value, meta) {
                                   return Text(
-                                    DateFormat('dd/MM').format(date),
+                                    '${value.toInt()}',
                                     style: const TextStyle(fontSize: 10),
                                   );
-                                }
-                                return const Text('');
-                              },
+                                },
+                              ),
+                            ),
+                            bottomTitles: AxisTitles(
+                              sideTitles: SideTitles(
+                                showTitles: true,
+                                reservedSize: 30,
+                                getTitlesWidget: (value, meta) {
+                                  if (value.toInt() < prices.length) {
+                                    final date = prices[value.toInt()].date;
+                                    return Text(
+                                      DateFormat('dd/MM').format(date),
+                                      style: const TextStyle(fontSize: 10),
+                                    );
+                                  }
+                                  return const Text('');
+                                },
+                              ),
+                            ),
+                            rightTitles: const AxisTitles(
+                              sideTitles: SideTitles(showTitles: false),
+                            ),
+                            topTitles: const AxisTitles(
+                              sideTitles: SideTitles(showTitles: false),
                             ),
                           ),
-                          rightTitles: const AxisTitles(
-                            sideTitles: SideTitles(showTitles: false),
-                          ),
-                          topTitles: const AxisTitles(
-                            sideTitles: SideTitles(showTitles: false),
-                          ),
+                          borderData: FlBorderData(show: true),
+                          lineBarsData: [
+                            LineChartBarData(
+                              spots: prices.asMap().entries.map((entry) {
+                                return FlSpot(
+                                  entry.key.toDouble(),
+                                  entry.value.price,
+                                );
+                              }).toList(),
+                              isCurved: true,
+                              color: Colors.blue,
+                              barWidth: 3,
+                              dotData: const FlDotData(show: true),
+                              belowBarData: BarAreaData(show: false),
+                            ),
+                          ],
+                          minY: prices.isEmpty
+                              ? 0
+                              : prices
+                                        .map((p) => p.price)
+                                        .reduce((a, b) => a < b ? a : b) *
+                                    0.9,
+                          maxY: prices.isEmpty
+                              ? 1000
+                              : prices
+                                        .map((p) => p.price)
+                                        .reduce((a, b) => a > b ? a : b) *
+                                    1.1,
                         ),
-                        borderData: FlBorderData(show: true),
-                        lineBarsData: [
-                          LineChartBarData(
-                            spots: prices.asMap().entries.map((entry) {
-                              return FlSpot(
-                                entry.key.toDouble(),
-                                entry.value.price,
-                              );
-                            }).toList(),
-                            isCurved: true,
-                            color: Colors.blue,
-                            barWidth: 3,
-                            dotData: const FlDotData(show: true),
-                            belowBarData: BarAreaData(show: false),
-                          ),
-                        ],
-                        minY: prices.isEmpty
-                            ? 0
-                            : prices
-                                      .map((p) => p.price)
-                                      .reduce((a, b) => a < b ? a : b) *
-                                  0.9,
-                        maxY: prices.isEmpty
-                            ? 1000
-                            : prices
-                                      .map((p) => p.price)
-                                      .reduce((a, b) => a > b ? a : b) *
-                                  1.1,
                       ),
                     ),
                   ),

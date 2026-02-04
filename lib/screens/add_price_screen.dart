@@ -147,30 +147,38 @@ class _AddPriceScreenState extends State<AddPriceScreen> {
               },
             ),
             const SizedBox(height: 16),
-            InkWell(
-              onTap: () => _selectDate(context),
-              child: InputDecorator(
-                decoration: const InputDecoration(
-                  labelText: 'Date',
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.calendar_today),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(DateFormat('dd/MM/yyyy').format(_selectedDate)),
-                    const Icon(Icons.arrow_drop_down),
-                  ],
+            Semantics(
+              label: 'Sélectionner la date, actuellement ${DateFormat('dd MMMM yyyy', 'fr_FR').format(_selectedDate)}',
+              button: true,
+              child: InkWell(
+                onTap: () => _selectDate(context),
+                child: InputDecorator(
+                  decoration: const InputDecoration(
+                    labelText: 'Date',
+                    border: OutlineInputBorder(),
+                    prefixIcon: Icon(Icons.calendar_today),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(DateFormat('dd/MM/yyyy').format(_selectedDate)),
+                      const Icon(Icons.arrow_drop_down),
+                    ],
+                  ),
                 ),
               ),
             ),
             const SizedBox(height: 24),
-            ElevatedButton(
-              onPressed: _savePrice,
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 16),
+            Semantics(
+              label: 'Enregistrer le prix',
+              button: true,
+              child: ElevatedButton(
+                onPressed: _savePrice,
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                ),
+                child: const Text('Enregistrer'),
               ),
-              child: const Text('Enregistrer'),
             ),
           ],
         ),

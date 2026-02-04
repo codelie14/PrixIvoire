@@ -136,35 +136,43 @@ class _ExportImportScreenState extends State<ExportImportScreen> {
                     ),
                   ),
                   const SizedBox(height: 16),
-                  ElevatedButton.icon(
-                    onPressed: _isExporting ? null : _exportPrices,
-                    icon: _isExporting
-                        ? const SizedBox(
-                            width: 16,
-                            height: 16,
-                            child: CircularProgressIndicator(strokeWidth: 2),
-                          )
-                        : const Icon(Icons.file_download),
-                    label: const Text('Exporter les prix'),
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      minimumSize: const Size(double.infinity, 0),
+                  Semantics(
+                    label: 'Exporter tous les prix en format CSV',
+                    button: true,
+                    child: ElevatedButton.icon(
+                      onPressed: _isExporting ? null : _exportPrices,
+                      icon: _isExporting
+                          ? const SizedBox(
+                              width: 16,
+                              height: 16,
+                              child: CircularProgressIndicator(strokeWidth: 2),
+                            )
+                          : const Icon(Icons.file_download),
+                      label: const Text('Exporter les prix'),
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        minimumSize: const Size(double.infinity, 0),
+                      ),
                     ),
                   ),
                   const SizedBox(height: 8),
-                  ElevatedButton.icon(
-                    onPressed: _isExporting ? null : _exportAlerts,
-                    icon: _isExporting
-                        ? const SizedBox(
-                            width: 16,
-                            height: 16,
-                            child: CircularProgressIndicator(strokeWidth: 2),
-                          )
-                        : const Icon(Icons.file_download),
-                    label: const Text('Exporter les alertes'),
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      minimumSize: const Size(double.infinity, 0),
+                  Semantics(
+                    label: 'Exporter toutes les alertes en format CSV',
+                    button: true,
+                    child: ElevatedButton.icon(
+                      onPressed: _isExporting ? null : _exportAlerts,
+                      icon: _isExporting
+                          ? const SizedBox(
+                              width: 16,
+                              height: 16,
+                              child: CircularProgressIndicator(strokeWidth: 2),
+                            )
+                          : const Icon(Icons.file_download),
+                      label: const Text('Exporter les alertes'),
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        minimumSize: const Size(double.infinity, 0),
+                      ),
                     ),
                   ),
                   if (_exportedFilePath != null) ...[

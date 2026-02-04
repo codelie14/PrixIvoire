@@ -55,85 +55,96 @@ class _PriceComparisonScreenState extends State<PriceComparisonScreen> {
       appBar: AppBar(
         title: const Text('Comparaison des prix'),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.filter_alt),
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (context) => AlertDialog(
-                  title: const Text('Filtres'),
-                  content: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      DropdownButtonFormField<String>(
-                        initialValue: _selectedProduct,
-                        decoration: const InputDecoration(labelText: 'Produit'),
-                        items: [
-                          const DropdownMenuItem<String>(
-                            value: null,
-                            child: Text('Tous les produits'),
+          Semantics(
+            label: 'Ouvrir les filtres',
+            button: true,
+            child: IconButton(
+              icon: const Icon(Icons.filter_alt),
+              tooltip: 'Filtrer les prix',
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: const Text('Filtres'),
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Semantics(
+                          label: 'Filtrer par produit',
+                          child: DropdownButtonFormField<String>(
+                            initialValue: _selectedProduct,
+                            decoration: const InputDecoration(labelText: 'Produit'),
+                            items: [
+                              const DropdownMenuItem<String>(
+                                value: null,
+                                child: Text('Tous les produits'),
+                              ),
+                              ...products.map(
+                                (product) => DropdownMenuItem(
+                                  value: product,
+                                  child: Text(product),
+                                ),
+                              ),
+                            ],
+                            onChanged: (value) {
+                              setState(() {
+                                _selectedProduct = value;
+                              });
+                              _applyFilters();
+                              Navigator.pop(context);
+                            },
                           ),
-                          ...products.map(
-                            (product) => DropdownMenuItem(
-                              value: product,
-                              child: Text(product),
-                            ),
+                        ),
+                        const SizedBox(height: 16),
+                        Semantics(
+                          label: 'Filtrer par magasin',
+                          child: DropdownButtonFormField<String>(
+                            initialValue: _selectedShop,
+                            decoration: const InputDecoration(labelText: 'Magasin'),
+                            items: [
+                              const DropdownMenuItem<String>(
+                                value: null,
+                                child: Text('Tous les magasins'),
+                              ),
+                              ...shops.map(
+                                (shop) => DropdownMenuItem(
+                                  value: shop,
+                                  child: Text(shop),
+                                ),
+                              ),
+                            ],
+                            onChanged: (value) {
+                              setState(() {
+                                _selectedShop = value;
+                              });
+                              _applyFilters();
+                              Navigator.pop(context);
+                            },
                           ),
-                        ],
-                        onChanged: (value) {
+                        ),
+                      ],
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
                           setState(() {
-                            _selectedProduct = value;
+                            _selectedProduct = null;
+                            _selectedShop = null;
                           });
                           _applyFilters();
                           Navigator.pop(context);
                         },
+                        child: const Text('Réinitialiser'),
                       ),
-                      const SizedBox(height: 16),
-                      DropdownButtonFormField<String>(
-                        initialValue: _selectedShop,
-                        decoration: const InputDecoration(labelText: 'Magasin'),
-                        items: [
-                          const DropdownMenuItem<String>(
-                            value: null,
-                            child: Text('Tous les magasins'),
-                          ),
-                          ...shops.map(
-                            (shop) => DropdownMenuItem(
-                              value: shop,
-                              child: Text(shop),
-                            ),
-                          ),
-                        ],
-                        onChanged: (value) {
-                          setState(() {
-                            _selectedShop = value;
-                          });
-                          _applyFilters();
-                          Navigator.pop(context);
-                        },
+                      TextButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: const Text('Fermer'),
                       ),
                     ],
                   ),
-                  actions: [
-                    TextButton(
-                      onPressed: () {
-                        setState(() {
-                          _selectedProduct = null;
-                          _selectedShop = null;
-                        });
-                        _applyFilters();
-                        Navigator.pop(context);
-                      },
-                      child: const Text('Réinitialiser'),
-                    ),
-                    TextButton(
-                      onPressed: () => Navigator.pop(context),
-                      child: const Text('Fermer'),
-                    ),
-                  ],
-                ),
-              );
-            },
+                );
+              },
+            ),
           ),
         ],
       ),
@@ -148,27 +159,30 @@ class _PriceComparisonScreenState extends State<PriceComparisonScreen> {
                     horizontal: 16,
                     vertical: 8,
                   ),
-                  child: ListTile(
-                    title: Text(
-                      price.productName,
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(price.shop),
-                        Text(
-                          DateFormat('dd/MM/yyyy').format(price.date),
-                          style: const TextStyle(fontSize: 12),
+                  child: Semantics(
+                    label: '${price.productName}, ${price.price.toStringAsFixed(0)} francs CFA, ${price.shop}, ${DateFormat('dd MMMM yyyy', 'fr_FR').format(price.date)}',
+                    child: ListTile(
+                      title: Text(
+                        price.productName,
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(price.shop),
+                          Text(
+                            DateFormat('dd/MM/yyyy').format(price.date),
+                            style: const TextStyle(fontSize: 12),
+                          ),
+                        ],
+                      ),
+                      trailing: Text(
+                        '${price.price.toStringAsFixed(0)} FCFA',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          color: Colors.green,
                         ),
-                      ],
-                    ),
-                    trailing: Text(
-                      '${price.price.toStringAsFixed(0)} FCFA',
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                        color: Colors.green,
                       ),
                     ),
                   ),

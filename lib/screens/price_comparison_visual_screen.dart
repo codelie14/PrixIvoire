@@ -123,9 +123,11 @@ class PriceComparisonVisualScreen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 16),
-                    SizedBox(
-                      height: 300,
-                      child: BarChart(
+                    Semantics(
+                      label: 'Graphique de comparaison des prix par site marchand',
+                      child: SizedBox(
+                        height: 300,
+                        child: BarChart(
                         BarChartData(
                           alignment: BarChartAlignment.spaceAround,
                           maxY: _maxPrice != null ? _maxPrice! * 1.2 : 100000,
@@ -243,14 +245,16 @@ class PriceComparisonVisualScreen extends StatelessWidget {
               final isMin = product.price == _minPrice;
               final isMax = product.price == _maxPrice;
 
-              return Card(
-                margin: const EdgeInsets.only(bottom: 12),
-                color: isMin
-                    ? Colors.green.shade50
-                    : isMax
-                        ? Colors.red.shade50
-                        : null,
-                child: ListTile(
+              return Semantics(
+                label: '${product.shop}, ${NumberFormat('#,##0').format(product.price)} francs CFA${isMin ? ', meilleur prix' : isMax ? ', prix le plus élevé' : ''}',
+                child: Card(
+                  margin: const EdgeInsets.only(bottom: 12),
+                  color: isMin
+                      ? Colors.green.shade50
+                      : isMax
+                          ? Colors.red.shade50
+                          : null,
+                  child: ListTile(
                   leading: Container(
                     width: 50,
                     height: 50,

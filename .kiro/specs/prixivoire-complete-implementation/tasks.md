@@ -125,14 +125,14 @@ Ce plan d'implémentation décompose les améliorations de PrixIvoire en tâches
     - _Exigences: 2.4_
 
 
-- [ ] 6. Améliorer l'accessibilité de l'interface
-  - [ ] 6.1 Ajouter les labels sémantiques aux widgets interactifs
+- [x] 6. Améliorer l'accessibilité de l'interface
+  - [x] 6.1 Ajouter les labels sémantiques aux widgets interactifs
     - Parcourir tous les écrans existants
     - Ajouter semanticsLabel à tous les boutons, champs, liens
     - Tester avec TalkBack (Android) et VoiceOver (iOS)
     - _Exigences: 1.6_
   
-  - [ ] 6.2 Implémenter les animations de transition
+  - [x] 6.2 Implémenter les animations de transition
     - Créer des PageRoute personnalisés avec animations
     - Limiter la durée des transitions à 300ms maximum
     - Appliquer aux navigations entre écrans

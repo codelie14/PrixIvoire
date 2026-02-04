@@ -6,6 +6,7 @@ import '../services/cache_service.dart';
 import '../models/scraped_product.dart';
 import '../models/product_price.dart';
 import '../models/search_history.dart';
+import '../core/utils/page_transitions.dart';
 import 'price_comparison_visual_screen.dart';
 
 class ProductSearchScreen extends StatefulWidget {
@@ -289,24 +290,32 @@ class _ProductSearchScreenState extends State<ProductSearchScreen> {
         foregroundColor: Colors.white,
         actions: [
           if (_filteredResults.isNotEmpty)
-            IconButton(
-              icon: const Icon(Icons.compare_arrows),
-              tooltip: 'Comparer les prix',
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => PriceComparisonVisualScreen(
-                      products: _filteredResults,
+            Semantics(
+              label: 'Comparer les prix des produits trouvés',
+              button: true,
+              child: IconButton(
+                icon: const Icon(Icons.compare_arrows),
+                tooltip: 'Comparer les prix',
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    FadeSlidePageRoute(
+                      page: PriceComparisonVisualScreen(
+                        products: _filteredResults,
+                      ),
                     ),
-                  ),
-                );
-              },
+                  );
+                },
+              ),
             ),
-          IconButton(
-            icon: const Icon(Icons.filter_list),
-            tooltip: 'Filtres et tri',
-            onPressed: _showFilterDialog,
+          Semantics(
+            label: 'Ouvrir les filtres et options de tri',
+            button: true,
+            child: IconButton(
+              icon: const Icon(Icons.filter_list),
+              tooltip: 'Filtres et tri',
+              onPressed: _showFilterDialog,
+            ),
           ),
         ],
       ),
@@ -353,16 +362,20 @@ class _ProductSearchScreenState extends State<ProductSearchScreen> {
                       ),
                     ),
                     const SizedBox(width: 8),
-                    ElevatedButton.icon(
-                      onPressed: _isSearching ? null : _searchProduct,
-                      icon: _isSearching
-                          ? const SizedBox(
-                              width: 20,
-                              height: 20,
-                              child: CircularProgressIndicator(strokeWidth: 2),
-                            )
-                          : const Icon(Icons.search),
-                      label: const Text('Rechercher'),
+                    Semantics(
+                      label: 'Lancer la recherche',
+                      button: true,
+                      child: ElevatedButton.icon(
+                        onPressed: _isSearching ? null : _searchProduct,
+                        icon: _isSearching
+                            ? const SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(strokeWidth: 2),
+                              )
+                            : const Icon(Icons.search),
+                        label: const Text('Rechercher'),
+                      ),
                     ),
                   ],
                 ),
@@ -622,10 +635,14 @@ class _ProductSearchScreenState extends State<ProductSearchScreen> {
                                     ],
                                   ),
                                   trailing: product.price != null
-                                      ? IconButton(
-                                          icon: const Icon(Icons.save),
-                                          tooltip: 'Sauvegarder le prix',
-                                          onPressed: () => _saveProduct(product),
+                                      ? Semantics(
+                                          label: 'Sauvegarder le prix de ${product.name}',
+                                          button: true,
+                                          child: IconButton(
+                                            icon: const Icon(Icons.save),
+                                            tooltip: 'Sauvegarder le prix',
+                                            onPressed: () => _saveProduct(product),
+                                          ),
                                         )
                                       : null,
                                   isThreeLine: true,

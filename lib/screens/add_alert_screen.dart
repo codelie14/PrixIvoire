@@ -64,27 +64,30 @@ class _AddAlertScreenState extends State<AddAlertScreen> {
         child: ListView(
           padding: const EdgeInsets.all(16.0),
           children: [
-            DropdownButtonFormField<String>(
-              initialValue: _selectedProduct,
-              decoration: const InputDecoration(
-                labelText: 'Produit',
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.shopping_bag),
+            Semantics(
+              label: 'Sélectionner un produit pour l\'alerte',
+              child: DropdownButtonFormField<String>(
+                initialValue: _selectedProduct,
+                decoration: const InputDecoration(
+                  labelText: 'Produit',
+                  border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.shopping_bag),
+                ),
+                items: products.map((product) {
+                  return DropdownMenuItem(value: product, child: Text(product));
+                }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    _selectedProduct = value;
+                  });
+                },
+                validator: (value) {
+                  if (value == null) {
+                    return 'Veuillez sélectionner un produit';
+                  }
+                  return null;
+                },
               ),
-              items: products.map((product) {
-                return DropdownMenuItem(value: product, child: Text(product));
-              }).toList(),
-              onChanged: (value) {
-                setState(() {
-                  _selectedProduct = value;
-                });
-              },
-              validator: (value) {
-                if (value == null) {
-                  return 'Veuillez sélectionner un produit';
-                }
-                return null;
-              },
             ),
             const SizedBox(height: 16),
             TextFormField(
@@ -134,12 +137,16 @@ class _AddAlertScreenState extends State<AddAlertScreen> {
               },
             ),
             const SizedBox(height: 24),
-            ElevatedButton(
-              onPressed: _saveAlert,
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 16),
+            Semantics(
+              label: 'Créer l\'alerte de prix',
+              button: true,
+              child: ElevatedButton(
+                onPressed: _saveAlert,
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                ),
+                child: const Text('Créer l\'alerte'),
               ),
-              child: const Text('Créer l\'alerte'),
             ),
           ],
         ),
