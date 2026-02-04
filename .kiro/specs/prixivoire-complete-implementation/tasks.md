@@ -185,21 +185,21 @@ Ce plan d'implémentation décompose les améliorations de PrixIvoire en tâches
     - _Exigences: 10.5_
 
 
-- [ ] 9. Implémenter le système de cache
-  - [ ] 9.1 Créer CacheManager avec politique LRU
+- [x] 9. Implémenter le système de cache
+  - [x] 9.1 Créer CacheManager avec politique LRU
     - Définir la structure CacheEntry avec métadonnées
     - Implémenter get(), set(), invalidate(), clear()
     - Implémenter evictLRU() pour supprimer les entrées anciennes
     - Limiter la taille à 10MB
     - _Exigences: 12.1, 12.4_
   
-  - [ ] 9.2 Implémenter le TTL et l'invalidation
+  - [x] 9.2 Implémenter le TTL et l'invalidation
     - Ajouter la gestion du Time To Live (5 minutes pour recherches)
     - Implémenter invalidatePattern() pour invalidation par motif
     - Invalider automatiquement lors des modifications de données
     - _Exigences: 12.2, 12.5_
   
-  - [ ] 9.3 Intégrer le cache dans les services
+  - [x] 9.3 Intégrer le cache dans les services
     - Mettre en cache les 50 produits les plus consultés
     - Mettre en cache les résultats de recherche
     - Ajouter une option de vidage manuel dans les paramètres
